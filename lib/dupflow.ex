@@ -3,7 +3,12 @@ defmodule Dupflow do
       when n > 0 do
     0..3
     |> Enum.each(fn _ ->
-      GenStage.cast(Dupflow.Start, {:push, {UUID.uuid4(), "testo libero"}})
+      msg =
+        ?a..?z
+        |> Enum.shuffle()
+        |> Enum.take(10)
+
+      GenStage.cast(Dupflow.Start, {:push, {UUID.uuid4(), msg}})
     end)
 
     push(n - 1)

@@ -7,6 +7,10 @@ defmodule Dupflow.MyFlow do
     :dets.open_file(:debug, type: :set)
 
     Flow.from_stages([Dupflow.Start], min_demand: 0, max_demand: 1)
+    |> Flow.map(fn e ->
+      GenServer.cast(Dupflow.Guard, {:dispatch, e})
+      e
+    end)
     |> Flow.map(&checkpoint/1)
     |> Flow.flat_map(fn x ->
       [x, x, x]
@@ -28,6 +32,7 @@ defmodule Dupflow.MyFlow do
   rescue
     e ->
       Logger.error("the winner is #{uuid}, error: #{inspect(e)}")
+      GenServer.cast(Dupflow.Guard, {:dup, x})
       x
   end
 end

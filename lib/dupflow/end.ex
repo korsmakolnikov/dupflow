@@ -14,13 +14,17 @@ defmodule Dupflow.End do
     # IO.inspect(events, label: "handle_events")
 
     Enum.reduce(events, %{}, fn {uuid, i}, acc ->
-      case Map.get(acc, uuid) do
-        nil ->
-          Map.put(acc, uuid, [i])
+      x =
+        case Map.get(acc, uuid) do
+          nil ->
+            Map.put(acc, uuid, [i])
 
-        _ ->
-          Map.update!(acc, uuid, fn list -> list ++ [i] end)
-      end
+          _ ->
+            Map.update!(acc, uuid, fn list -> list ++ [i] end)
+        end
+
+      GenServer.cast(Dupflow.Guard, {:work, i})
+      x
     end)
     |> IO.inspect(label: "aggregate")
 

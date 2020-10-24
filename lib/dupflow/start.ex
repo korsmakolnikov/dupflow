@@ -13,7 +13,7 @@ defmodule Dupflow.Start do
   def handle_cast({:push, msg}, %{queue: queue, remained: remained})
       when remained === 0 do
     IO.inspect(pass: :cast_0, q: Enum.count(queue), r: remained)
-    {:noreply, queue, %{queue: Enum.concat(queue, [msg]), remained: 0}}
+    {:noreply, [], %{queue: Enum.concat(queue, [msg]), remained: 0}}
   end
 
   @impl GenStage

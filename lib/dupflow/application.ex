@@ -8,7 +8,8 @@ defmodule Dupflow.Application do
   def start(_type, _args) do
     children = [
       Dupflow.Start,
-      Dupflow.End
+      Dupflow.End,
+      Dupflow.Guard
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
